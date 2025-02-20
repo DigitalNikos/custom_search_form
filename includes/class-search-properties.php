@@ -1,5 +1,12 @@
 <?php
-// File: includes/class-search-properties.php
+/**
+ * Class Search_Properties
+ *
+ * Handles property search functionality including AJAX filtering,
+ * rendering of property results (for the results page), and random property suggestions.
+ *
+ * @package My_Custom_Search
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -8,106 +15,136 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Search_Properties {
 
     /**
-     * Handles the AJAX request for filtering properties.
+     * Retrieves and sanitizes filter parameters from either GET or POST.
+     *
+     * @param string $source 'GET' or 'POST'.
+     * @return array Associative array of filters.
      */
-    public static function filter_properties() {
-        // Verify nonce for security.
-        check_ajax_referer( 'res_filter_nonce', 'nonce' );
+    private static function get_filters( $source = 'GET' ) {
+        $data = ( $source === 'GET' ) ? $_GET : $_POST;
+        $filters = array();
+        $filters['deal_type']     = isset( $data['deal_type'] ) ? sanitize_text_field( $data['deal_type'] ) : '';
+        $filters['property_type'] = isset( $data['property_type'] ) ? sanitize_text_field( $data['property_type'] ) : '';
+        $filters['county']        = isset( $data['county'] ) ? sanitize_text_field( $data['county'] ) : '';
+        $filters['city']          = isset( $data['city'] ) ? sanitize_text_field( $data['city'] ) : '';
+        $price_min_raw            = isset( $data['price_min'] ) ? sanitize_text_field( $data['price_min'] ) : '';
+        $price_max_raw            = isset( $data['price_max'] ) ? sanitize_text_field( $data['price_max'] ) : '';
+        $sqm_min_raw              = isset( $data['sqm_min'] )   ? sanitize_text_field( $data['sqm_min'] )   : '';
+        $sqm_max_raw              = isset( $data['sqm_max'] )   ? sanitize_text_field( $data['sqm_max'] )   : '';
 
-        // Sanitize incoming fields.
-        $deal_type     = isset( $_POST['deal_type'] ) ? sanitize_text_field( $_POST['deal_type'] ) : '';
-        $property_type = isset( $_POST['property_type'] ) ? sanitize_text_field( $_POST['property_type'] ) : '';
-        $price_min_raw = isset( $_POST['price_min'] ) ? sanitize_text_field( $_POST['price_min'] ) : '';
-        $price_max_raw = isset( $_POST['price_max'] ) ? sanitize_text_field( $_POST['price_max'] ) : '';
-        $sqm_min_raw   = isset( $_POST['sqm_min'] )   ? sanitize_text_field( $_POST['sqm_min'] )   : '';
-        $sqm_max_raw   = isset( $_POST['sqm_max'] )   ? sanitize_text_field( $_POST['sqm_max'] )   : '';
-        $county        = isset( $_POST['county'] )      ? sanitize_text_field( $_POST['county'] )  : '';
-        $city          = isset( $_POST['city'] )        ? sanitize_text_field( $_POST['city'] )    : '';
+        // Convert to numeric values.
+        $filters['price_min'] = intval( preg_replace( '/\D/', '', $price_min_raw ) );
+        $filters['price_max'] = intval( preg_replace( '/\D/', '', $price_max_raw ) );
+        $filters['sqm_min']   = intval( $sqm_min_raw );
+        $filters['sqm_max']   = intval( $sqm_max_raw );
+        return $filters;
+    }
 
-        // Convert numeric fields.
-        $price_min = intval( preg_replace( '/\D/', '', $price_min_raw ) );
-        $price_max = intval( preg_replace( '/\D/', '', $price_max_raw ) );
-        $sqm_min   = intval( $sqm_min_raw );
-        $sqm_max   = intval( $sqm_max_raw );
-
-        // Build meta query based on filters.
+    /**
+     * Builds a meta query array for WP_Query based on filters.
+     *
+     * @param array $filters Array of filter values.
+     * @return array Meta query array.
+     */
+    private static function build_meta_query( $filters ) {
         $meta_query = array( 'relation' => 'AND' );
-        if ( $deal_type ) {
+        if ( ! empty( $filters['deal_type'] ) ) {
             $meta_query[] = array(
                 'key'     => '_property_deal_type',
-                'value'   => $deal_type,
+                'value'   => $filters['deal_type'],
                 'compare' => '=',
             );
         }
-        if ( $property_type ) {
+        if ( ! empty( $filters['property_type'] ) ) {
             $meta_query[] = array(
                 'key'     => '_property_kind',
-                'value'   => $property_type,
+                'value'   => $filters['property_type'],
                 'compare' => '=',
             );
         }
-        if ( $city ) {
-            $meta_query[] = array(
-                'key'     => '_property_city',
-                'value'   => $city,
-                'compare' => 'LIKE',
-            );
-        }
-        if ( $county ) {
+        if ( ! empty( $filters['county'] ) ) {
             $meta_query[] = array(
                 'key'     => '_property_county',
-                'value'   => $county,
+                'value'   => $filters['county'],
                 'compare' => 'LIKE',
             );
         }
-        if ( $price_min >= 0 ) {
+        if ( ! empty( $filters['city'] ) ) {
+            $meta_query[] = array(
+                'key'     => '_property_city',
+                'value'   => $filters['city'],
+                'compare' => 'LIKE',
+            );
+        }
+        if ( $filters['price_min'] > 0 ) {
             $meta_query[] = array(
                 'key'     => '_property_price',
-                'value'   => $price_min,
+                'value'   => $filters['price_min'],
                 'type'    => 'NUMERIC',
                 'compare' => '>=',
             );
         }
-        if ( $price_max > 0 ) {
+        if ( $filters['price_max'] > 0 ) {
             $meta_query[] = array(
                 'key'     => '_property_price',
-                'value'   => $price_max,
+                'value'   => $filters['price_max'],
                 'type'    => 'NUMERIC',
                 'compare' => '<=',
             );
         }
-        if ( $sqm_min >= 0 ) {
+        if ( $filters['sqm_min'] > 0 ) {
             $meta_query[] = array(
                 'key'     => '_property_sqm',
-                'value'   => $sqm_min,
+                'value'   => $filters['sqm_min'],
                 'type'    => 'NUMERIC',
                 'compare' => '>=',
             );
         }
-        if ( $sqm_max > 0 ) {
+        if ( $filters['sqm_max'] > 0 ) {
             $meta_query[] = array(
                 'key'     => '_property_sqm',
-                'value'   => $sqm_max,
+                'value'   => $filters['sqm_max'],
                 'type'    => 'NUMERIC',
                 'compare' => '<=',
             );
         }
+        return $meta_query;
+    }
 
+    /**
+     * Retrieves filtered properties using WP_Query.
+     *
+     * @param array $filters Array of filters.
+     * @return WP_Query Query object.
+     */
+    private static function get_filtered_properties( $filters ) {
         $args = array(
             'post_type'      => 'property',
             'post_status'    => 'publish',
             'posts_per_page' => -1,
-            'meta_query'     => $meta_query,
+            'meta_query'     => self::build_meta_query( $filters ),
         );
+        return new WP_Query( $args );
+    }
 
-        $query = new WP_Query( $args );
+    /**
+     * Handles the AJAX request for filtering properties.
+     *
+     * Expects filter parameters via POST.
+     *
+     * @return void Outputs JSON response with matching properties.
+     */
+    public static function filter_properties() {
+        check_ajax_referer( 'res_filter_nonce', 'nonce' );
+        $filters = self::get_filters( 'POST' );
+        $query = self::get_filtered_properties( $filters );
         $properties_data = array();
 
         if ( $query->have_posts() ) {
             while ( $query->have_posts() ) {
                 $query->the_post();
 
-                // Define a mapping for property types.
+                // Map property types to translated labels.
                 $property_types = array(
                     'apartment'     => __( 'Διαμέρισμα', 'my-custom-search' ),
                     'house'         => __( 'Μονοκατοικία', 'my-custom-search' ),
@@ -125,7 +162,7 @@ class Search_Properties {
                 $sqm          = get_post_meta( get_the_ID(), '_property_sqm', true );
                 $full_address = trim( $address . ', ' . $city_value );
 
-                // Get the image URL with a fallback placeholder.
+                // Get image URL with fallback.
                 $main_image_id   = get_post_meta( get_the_ID(), '_property_main_image', true );
                 $placeholder_url = MY_CUSTOM_SEARCH_URL . 'assets/images/placeholder.jpg';
                 $img_url         = $placeholder_url;
@@ -139,15 +176,15 @@ class Search_Properties {
                 $translated_kind = isset( $property_types[ $kind ] ) ? $property_types[ $kind ] : $kind;
 
                 $properties_data[] = array(
-                    'title'       => get_the_title(),
-                    'permalink'   => get_the_permalink(),
-                    'kind'        => $translated_kind,
-                    'price'       => $price,
-                    'sqm'         => $sqm,
-                    'address'     => $full_address,
-                    'city'        => $city_value,
-                    'county'      => $county_value,
-                    'img_url'     => esc_url( $img_url ),
+                    'title'     => get_the_title(),
+                    'permalink' => get_the_permalink(),
+                    'kind'      => $translated_kind,
+                    'price'     => $price,
+                    'sqm'       => $sqm,
+                    'address'   => $full_address,
+                    'city'      => $city_value,
+                    'county'    => $county_value,
+                    'img_url'   => esc_url( $img_url ),
                 );
             }
             wp_reset_postdata();
@@ -159,9 +196,48 @@ class Search_Properties {
     }
 
     /**
-     * Retrieves random suggested properties.
-     * Although some developers may separate this into its own module,
-     * including it here is acceptable given the plugin’s focused purpose.
+     * Renders property results based on GET query parameters.
+     *
+     * Reads filters from the URL, performs the query, and returns HTML output.
+     *
+     * @return string HTML output containing the list of filtered properties.
+     */
+    public static function render_property_results() {
+        $filters = self::get_filters( 'GET' );
+        $query = self::get_filtered_properties( $filters );
+        ob_start();
+
+        if ( $query->have_posts() ) {
+            echo '<div class="property-results-list">';
+            while ( $query->have_posts() ) {
+                $query->the_post();
+                ?>
+                <div class="property-item" data-link="<?php echo esc_url( get_the_permalink() ); ?>">
+                    <h3 class="property-title"><a href="<?php echo esc_url( get_the_permalink() ); ?>"><?php the_title(); ?></a></h3>
+                    <p class="property-address"><?php echo esc_html( get_post_meta( get_the_ID(), '_property_address', true ) ); ?></p>
+                    <p class="property-meta">
+                        <?php
+                        $kind = get_post_meta( get_the_ID(), '_property_kind', true );
+                        $price = get_post_meta( get_the_ID(), '_property_price', true );
+                        $sqm = get_post_meta( get_the_ID(), '_property_sqm', true );
+                        echo esc_html( $kind ) . ' | ' . esc_html( $price ) . ' | ' . esc_html( $sqm ) . ' τ.μ.';
+                        ?>
+                    </p>
+                </div>
+                <?php
+            }
+            echo '</div>';
+            wp_reset_postdata();
+        } else {
+            echo '<p>' . esc_html__( 'No properties found matching your criteria.', 'my-custom-search' ) . '</p>';
+        }
+        return ob_get_clean();
+    }
+
+    /**
+     * Retrieves random suggested properties and renders them as a Swiper slider.
+     *
+     * @return string HTML markup of the slider with random properties.
      */
     public static function get_random_properties() {
         $args = array(
@@ -169,8 +245,9 @@ class Search_Properties {
             'posts_per_page' => 4,
             'orderby'        => 'rand',
         );
-        $query  = new WP_Query( $args );
+        $query = new WP_Query( $args );
         $output = '';
+
         if ( $query->have_posts() ) {
             $output .= '<div class="random-suggested-properties swiper-container">';
             $output .= '<div class="swiper-wrapper">';
@@ -186,16 +263,16 @@ class Search_Properties {
                     'service_areas' => __( 'Βοηθητικοί χώροι', 'my-custom-search' ),
                 );
 
-                $permalink   = get_the_permalink();
-                $title       = get_the_title();
-                $kind        = get_post_meta( get_the_ID(), '_property_kind', true );
-                $price       = get_post_meta( get_the_ID(), '_property_price', true );
-                $address     = get_post_meta( get_the_ID(), '_property_address', true );
-                $city        = get_post_meta( get_the_ID(), '_property_city', true );
-                $sqm         = get_post_meta( get_the_ID(), '_property_sqm', true );
+                $permalink = get_the_permalink();
+                $title = get_the_title();
+                $kind = get_post_meta( get_the_ID(), '_property_kind', true );
+                $price = get_post_meta( get_the_ID(), '_property_price', true );
+                $address = get_post_meta( get_the_ID(), '_property_address', true );
+                $city = get_post_meta( get_the_ID(), '_property_city', true );
+                $sqm = get_post_meta( get_the_ID(), '_property_sqm', true );
 
                 $main_image_id = get_post_meta( get_the_ID(), '_property_main_image', true );
-                $img_url       = $main_image_id ? wp_get_attachment_url( $main_image_id ) : 'https://via.placeholder.com/320x240';
+                $img_url = $main_image_id ? wp_get_attachment_url( $main_image_id ) : 'https://via.placeholder.com/320x240';
 
                 $output .= '<div class="swiper-slide">';
                 $output .= '<div class="random-property-result-item" data-link="' . esc_url( $permalink ) . '">';

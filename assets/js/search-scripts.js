@@ -112,31 +112,41 @@
             }
         },
 
+        // bindFormSubmit: function() {
+        //     $('.main-search-form').on('submit.MRFS', function(e) {
+        //         e.preventDefault();
+        //         var formData = $(this).serialize();
+        //         console.log("Data being sent:", formData);
+        //         formData += '&action=filter_properties';
+        //         formData += '&nonce=' + mySearchData.nonce;
+        //         $.ajax({
+        //             url: mySearchData.ajax_url,
+        //             type: 'POST',
+        //             data: formData,
+        //             dataType: 'json',
+        //             success: function(response) {
+        //                 if (response.success) {
+        //                     console.log("Properties received:", response.data);
+        //                 } else {
+        //                     console.log("No properties returned.");
+        //                 }
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 console.error("AJAX Error:", status, error);
+        //             }
+        //         });
+        //     });
+        // },
         bindFormSubmit: function() {
             $('.main-search-form').on('submit.MRFS', function(e) {
-                e.preventDefault();
-                var formData = $(this).serialize();
-                console.log("Data being sent:", formData);
-                formData += '&action=filter_properties';
-                formData += '&nonce=' + mySearchData.nonce;
-                $.ajax({
-                    url: mySearchData.ajax_url,
-                    type: 'POST',
-                    data: formData,
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            console.log("Properties received:", response.data);
-                        } else {
-                            console.log("No properties returned.");
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX Error:", status, error);
-                    }
-                });
+                // Remove preventDefault so the form submits normally.
+                // e.preventDefault();  <-- This line is removed.
+                console.log("Main form submitted. Data being sent:", $(this).serialize());
+                // No need for the AJAX call if you want a full page redirect.
+                // The form's action attribute should point to your results page.
             });
         },
+        
 
         /**
          * Binds the change event on the county dropdown to update the city dropdown.
