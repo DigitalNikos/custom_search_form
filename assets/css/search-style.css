@@ -1,0 +1,49 @@
+.real-estate-search-form {
+    position: relative;
+    width:100%;
+    padding: 30px 20px 15px;
+    background: #fff;
+    border-radius: 8px;
+    font-family: sans-serif;
+}
+
+.search-form-toggle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -160%);
+    display: flex;
+    z-index: 10;
+}
+
+.search-form-toggle .toggle-btn{
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    outline: none;
+}
+
+.search-form-toggle .toggle-btn:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.search-form-toggle .toggle-btn:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+.search-form-toggle .toggle-btn.active {
+    background: #fff;
+    color: #000;
+}
+
+/* ========== 3. Form Fields (Alignment Fix) ========== */
+.main-search-form .form-field {
+    display: flex;
+    align-items: center; /* Ensures perfect vertical alignment */
+    height: 40px;
+    margin-bottom: 15px;
+
+}
