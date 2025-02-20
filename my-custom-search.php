@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Real Estate Search Form
+ * Plugin Name: Real Estate Custom Search Form
  * Plugin URI:  https://example.com
  * Description: A plugin to display custom real estate search forms with Rent/Buy toggle and property filtering.
  * Version:     1.0
