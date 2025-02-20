@@ -33,14 +33,16 @@ if ( ! defined( 'ABSPATH' ) ) {
             <label><i class="fa-solid fa-house"></i></label>
             <select name="property_type" id="property_type">
                 <option value=""><?php esc_html_e( 'Είδος', 'my-custom-search' ); ?></option>
-                <option value="apartment"><?php esc_html_e( 'Διαμέρισμα', 'my-custom-search' ); ?></option>
-                <option value="house"><?php esc_html_e( 'Μονοκατοικία', 'my-custom-search' ); ?></option>
-                <option value="plot"><?php esc_html_e( 'Οικόπεδο', 'my-custom-search' ); ?></option>
-                <option value="land"><?php esc_html_e( 'Χωράφι', 'my-custom-search' ); ?></option>
-                <option value="office"><?php esc_html_e( 'Επαγγελματικός χώρος', 'my-custom-search' ); ?></option>
-                <option value="service_areas"><?php esc_html_e( 'Βοηθητικοί χώροι', 'my-custom-search' ); ?></option>
+                <?php 
+                if ( defined('MY_CUSTOM_PROPERTY_TYPES') && is_array(MY_CUSTOM_PROPERTY_TYPES) ) {
+                    foreach ( MY_CUSTOM_PROPERTY_TYPES as $key => $label ) {
+                        echo '<option value="' . esc_attr( $key ) . '">' . esc_html( $label ) . '</option>';
+                    }
+                }
+                ?>
             </select>
         </div>
+        
         <div class="form-row">
             <label class="form-icon"><i class="fa-solid fa-tag"></i></label>
             <div class="form-field-group">

@@ -46,12 +46,20 @@ function my_custom_search_enqueue_assets() {
         array(),
         '6.7.2'
     );
-    
+
     wp_enqueue_style(
         'my-custom-search-style', 
         MY_CUSTOM_SEARCH_URL . 'assets/css/search-style.css', 
         array(), 
         '1.0', 
+        'all'
+    );
+    
+    wp_enqueue_style(
+        'inline-search-style',
+        MY_CUSTOM_SEARCH_URL . 'assets/css/inline-search-style.css',
+        array(),
+        '1.0',
         'all'
     );
     
