@@ -39,6 +39,14 @@ add_action( 'plugins_loaded', 'my_custom_search_init' );
  * These files are responsible for the modern design and interactivity of your search forms.
  */
 function my_custom_search_enqueue_assets() {
+
+    wp_enqueue_style(
+        'font-awesome-6',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css',
+        array(),
+        '6.7.2'
+    );
+    
     wp_enqueue_style(
         'my-custom-search-style', 
         MY_CUSTOM_SEARCH_URL . 'assets/css/search-style.css', 

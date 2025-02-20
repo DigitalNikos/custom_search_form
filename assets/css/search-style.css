@@ -1,10 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
+
 .real-estate-search-form {
     position: relative;
     width:100%;
     padding: 30px 20px 15px;
     background: #fff;
     border-radius: 8px;
-    font-family: sans-serif;
+    font-family: 'Manrope';
+}
+
+.form-field{
+    align-items: center;
+    justify-content: center;
 }
 
 .search-form-toggle {
@@ -19,8 +26,8 @@
 .search-form-toggle .toggle-btn{
     background: rgba(0, 0, 0, 0.4);
     color: #fff;
-    font-size: 1.5rem;
-    font-weight: 500;
+    font-size: 1.3rem;
+    font-weight: 400;
     cursor: pointer;
     transition: background 0.3s, color 0.3s;
     outline: none;
@@ -45,5 +52,101 @@
     align-items: center; /* Ensures perfect vertical alignment */
     height: 40px;
     margin-bottom: 15px;
+}
 
+.main-search-form label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px; /* Ensures icons don't shift */
+    text-align: center;
+    font-weight: 500;
+    height: 100%;
+}
+
+.main-search-form select {
+    appearance: none;
+    padding: 0.4rem 2rem 0.4rem 0.4rem;
+    background: url("data:image/svg+xml;utf8,<svg fill='rgba(0,0,0,0.4)' height='8' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M0 0l6 6 6-6z'/></svg>") no-repeat right 0.75rem center;
+    background-size: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #fff;
+    width: 100%;
+}
+
+/* ========== 5. Rows (for Price and Sqm fields) ========== */
+.form-field-group {
+    display: flex;
+    gap: 10px; /* Adds space ONLY between min and max fields */
+    width: 100%; /* Ensures it takes full width */
+}
+
+.main-search-form .form-row {
+    display: flex;
+    align-items: center !important;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.main-search-form .form-row .half-width {
+    flex: 1;
+    column-gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ========== 6. Icons (Uniform Size & Alignment) ========== */
+.form-field label {
+    justify-content: flex-start !important;
+    
+}
+
+.form-field label i {
+    font-size: 22px !important; /* Ensures all icons are the same size */
+    color: #7BB131;
+    min-width: 50px; /* Prevents icons from shifting */
+    display: flex;
+    justify-content: flex-start;
+}
+
+.form-row .form-icon i {
+    font-size: 22px !important; /* Ensures all icons are the same size */
+    color: #7BB131;
+    min-width: 49px; /* Prevents icons from shifting */
+    text-align: start;
+    padding-left: 5px;
+    /* justify-content: flex-start !important; */
+    
+}
+
+/* Fixes alignment for icons inside form rows */
+.form-row .form-icon {
+    display: flex;
+    justify-content: flex-start !important;    
+    height: 100%;
+    
+    
+}
+
+
+/* ========== 7. Submit Button ========== */
+.search-btn {
+    display: block;
+    width: 50%;
+    background: #7BB131;
+    color: #fff;
+    font-family: 'Manrope';
+    font-weight: 900;
+    font-size: 1.3rem;
+    padding: 0.6rem;
+    margin-top: 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background: #6aa227;
 }
