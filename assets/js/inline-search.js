@@ -274,6 +274,41 @@
             if (preselectedSqmMax) {
                 $('#inline_sqm_max').val(preselectedSqmMax);
             }
+
+             // Trigger updateSelects to correctly filter options
+            var currentDeal = $('#deal_type_input_inline_hidden').val() || 'rent';
+
+            if (currentDeal === 'buy') {
+                updateSelects(
+                    $('#inline_price_min'),
+                    $('#inline_price_max'),
+                    mySearchData.buy_prices_min,
+                    mySearchData.buy_prices_max,
+                    mySearchData.priceFrom,
+                    mySearchData.priceTo
+                );
+            } else {
+                updateSelects(
+                    $('#inline_price_min'),
+                    $('#inline_price_max'),
+                    mySearchData.rent_prices_min,
+                    mySearchData.rent_prices_max,
+                    mySearchData.priceFrom,
+                    mySearchData.priceTo
+                );
+            }
+
+            // Ensure SQM dropdowns also update immediately
+            updateSelects(
+                $('#inline_sqm_min'),
+                $('#inline_sqm_max'),
+                mySearchData.sqm_min,
+                mySearchData.sqm_max,
+                'τ.μ. Από',
+                'τ.μ. Έως'
+            );
+
+            MRFS_InlineSearch.bindPriceAndSqmChanges();
         },
 
         /**

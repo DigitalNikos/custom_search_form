@@ -16,8 +16,8 @@
      */
     function updateSelects($minSelect, $maxSelect, minArr, maxArr, labelMin, labelMax) {
         // Store current values.
-        var currentMin = $minSelect.val();
-        var currentMax = $maxSelect.val();
+        var currentMin = ($minSelect.val() || '').toString();
+        var currentMax = ($maxSelect.val() || '').toString();
         var selectedMin = parseInt(currentMin.replace(/\D/g, ''), 10) || 0;
         var selectedMax = parseInt(currentMax.replace(/\D/g, ''), 10) || Infinity;
     
@@ -65,6 +65,8 @@
             this.bindPriceAndSqmChanges();
             var dealType = $('#deal_type_input').val() || 'rent';
             this.updatePriceDropdowns(dealType);
+            this.restorePreselectedValues();  // Restore values on page load
+
         },
 
         /**
@@ -97,6 +99,72 @@
                 }
             });
         },
+
+        restorePreselectedValues: function() {
+            console.log("🔄 Restoring preselected values for main form.");
+
+            // ✅ Check if the user refreshed the page (modern method)
+            const navigationEntries = performance.getEntriesByType("navigation");
+            const isPageRefresh = navigationEntries.length > 0 && navigationEntries[0].type === "reload";
+        
+            if (isPageRefresh) {
+                console.log("🔄 Page refreshed. Clearing stored values.");
+                sessionStorage.removeItem('price_min');
+                sessionStorage.removeItem('price_max');
+                sessionStorage.removeItem('sqm_min');
+                sessionStorage.removeItem('sqm_max');
+                sessionStorage.removeItem('deal_type');
+            }
+        
+            var selectedPriceMin = sessionStorage.getItem('price_min') || $('#price_min').val() || '';  
+            var selectedPriceMax = sessionStorage.getItem('price_max') || $('#price_max').val() || '';  
+            var selectedSqmMin   = sessionStorage.getItem('sqm_min') || $('#sqm_min').val() || '';  
+            var selectedSqmMax   = sessionStorage.getItem('sqm_max') || $('#sqm_max').val() || '';  
+            var dealType = sessionStorage.getItem('deal_type') || $('#deal_type_input').val() || 'rent';
+        
+            console.log("📌 Restored values:", { selectedPriceMin, selectedPriceMax, selectedSqmMin, selectedSqmMax });
+        
+            // ✅ Ensure restored values are set in the dropdowns before updating the range
+            $('#price_min').val(selectedPriceMin);
+            $('#price_max').val(selectedPriceMax);
+            $('#sqm_min').val(selectedSqmMin);
+            $('#sqm_max').val(selectedSqmMax);
+        
+            // ✅ Ensure dropdown filtering applies immediately
+            if (dealType === 'buy') {
+                updateSelects(
+                    $('#price_min'),
+                    $('#price_max'),
+                    mySearchData.buy_prices_min,
+                    mySearchData.buy_prices_max,
+                    mySearchData.priceFrom,
+                    mySearchData.priceTo
+                );
+            } else {
+                updateSelects(
+                    $('#price_min'),
+                    $('#price_max'),
+                    mySearchData.rent_prices_min,
+                    mySearchData.rent_prices_max,
+                    mySearchData.priceFrom,
+                    mySearchData.priceTo
+                );
+            }
+        
+            updateSelects(
+                $('#sqm_min'),
+                $('#sqm_max'),
+                mySearchData.sqm_min,
+                mySearchData.sqm_max,
+                'τ.μ. Από',
+                'τ.μ. Έως'
+            );
+        
+            console.log("✅ Filters reapplied after restoring preselected values.");
+        },
+        
+        
+        
 
         /**
          * Updates the city dropdown (main form) for the selected county via AJAX.
@@ -141,7 +209,13 @@
                 var selectedType = $(this).data('type'); // "rent" or "buy"
                 console.log("User selected deal type:", selectedType);
                 $('#deal_type_input').val(selectedType);
-                console.log("Send to updatePriceDropdowns:", selectedType);
+                
+
+                // ✅ Clear previous price & sqm values from storage
+                sessionStorage.removeItem('price_min');
+                sessionStorage.removeItem('price_max');
+                sessionStorage.removeItem('sqm_min');
+                sessionStorage.removeItem('sqm_max');
                 MRFS_MainSearch.updatePriceDropdowns(selectedType);
             });
         },
@@ -176,8 +250,24 @@
 
         bindFormSubmit: function() {
             $('.main-search-form').on('submit.MRFS', function(e) {
-                // Remove preventDefault so the form submits normally.
-                console.log("Main form submitted. Data being sent:", $(this).serialize());
+                console.log("📌 Saving values before submitting form.");
+        
+                // Store form values in sessionStorage
+                sessionStorage.setItem('price_min', $('#price_min').val());
+                sessionStorage.setItem('price_max', $('#price_max').val());
+                sessionStorage.setItem('sqm_min', $('#sqm_min').val());
+                sessionStorage.setItem('sqm_max', $('#sqm_max').val());
+                sessionStorage.setItem('deal_type', $('#deal_type_input').val());
+        
+                console.log("✅ Stored values in sessionStorage:", {
+                    price_min: $('#price_min').val(),
+                    price_max: $('#price_max').val(),
+                    sqm_min: $('#sqm_min').val(),
+                    sqm_max: $('#sqm_max').val(),
+                    deal_type: $('#deal_type_input').val()
+                });
+        
+                // Allow the form to submit normally
             });
         },
 
