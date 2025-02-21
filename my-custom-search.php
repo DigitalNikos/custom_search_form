@@ -71,13 +71,15 @@ function my_custom_search_enqueue_assets() {
         true
     );
 
-    wp_enqueue_script(
-        'my-inline-search',
-        MY_CUSTOM_SEARCH_URL . 'assets/js/inline-search.js',
-        array('jquery'),
-        '1.0',
-        true
-    );
+    if ( is_page( 'property-search-results' ) ) {
+        wp_enqueue_script(
+            'my-inline-search',
+            MY_CUSTOM_SEARCH_URL . 'assets/js/inline-search.js',
+            array('jquery'),
+            '1.0',
+            true
+        );
+    }
 
     wp_localize_script( 'my-custom-search-scripts', 'mySearchData', array(
         'ajax_url'         => admin_url( 'admin-ajax.php' ),
@@ -86,6 +88,8 @@ function my_custom_search_enqueue_assets() {
         'rent_prices_max'  => MRFS_RENT_PRICES_MAX,
         'buy_prices_min'   => MRFS_BUY_PRICES_MIN,
         'buy_prices_max'   => MRFS_BUY_PRICES_MAX,
+        'sqm_min'          => MRFS_SQM_MIN,
+        'sqm_max'          => MRFS_SQM_MAX,
         'priceFrom'        => 'Τιμή από',
         'priceTo'          => 'Τιμή έως'
     ));

@@ -49,17 +49,11 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <div class="form-field half-width">
                     <select name="price_min" id="price_min">
                         <option value=""><?php esc_html_e( 'Τιμή από', 'my-custom-search' ); ?></option>
-                        <?php foreach ( MRFS_RENT_PRICES_MIN as $sqm ) : ?>
-                            <option value="<?php echo esc_attr( $sqm ); ?>"><?php echo esc_html( $sqm ); ?></option>
-                        <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-field half-width">
                 <select name="price_max" id="price_max">
                         <option value=""><?php esc_html_e( 'Τιμή έως', 'my-custom-search' ); ?></option>
-                        <?php foreach ( MRFS_RENT_PRICES_MAX as $sqm ) : ?>
-                            <option value="<?php echo esc_attr( $sqm ); ?>"><?php echo esc_html( $sqm ); ?></option>
-                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -70,23 +64,17 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <div class="form-field half-width">
                     <select name="sqm_min" id="sqm_min">
                         <option value=""><?php esc_html_e( 'τ.μ. Από', 'my-custom-search' ); ?></option>
-                        <?php
-                        $sqm_min = apply_filters( 'my_custom_search_sqm_min', array( 50, 100, 150 ) );
-                        foreach ( $sqm_min as $sqm ) {
-                            echo '<option value="' . esc_attr( $sqm ) . '">' . esc_html( $sqm ) . '</option>';
-                        }
-                        ?>
+                        <?php foreach ( MRFS_SQM_MIN as $sqm ) : ?>
+                            <option value="<?php echo esc_attr( $sqm ); ?>"><?php echo esc_html( $sqm ); ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="form-field half-width">
                     <select name="sqm_max" id="sqm_max">
                         <option value=""><?php esc_html_e( 'τ.μ. Έως', 'my-custom-search' ); ?></option>
-                        <?php
-                        $sqm_max = apply_filters( 'my_custom_search_sqm_max', array( 200, 250, 300 ) );
-                        foreach ( $sqm_max as $sqm ) {
-                            echo '<option value="' . esc_attr( $sqm ) . '">' . esc_html( $sqm ) . '</option>';
-                        }
-                        ?>
+                        <?php foreach ( MRFS_SQM_MAX as $sqm ) : ?>
+                            <option value="<?php echo esc_attr( $sqm ); ?>"><?php echo esc_html( $sqm ); ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
