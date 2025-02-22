@@ -351,7 +351,7 @@
             var output = '';
             if (Array.isArray(properties) && properties.length > 0) {
                 $.each(properties, function(i, property) {
-                    output += '<div class="property-item" data-link="' + property.permalink + '">';
+                    output += '<div class="property-item" data-link="' + property.permalink + '">malkaiad';
                     output += '<h3 class="property-title"><a href="' + property.permalink + '">' + property.title + '</a></h3>';
                     output += '<p class="property-address">' + property.address + '</p>';
                     output += '<p class="property-meta">' + property.kind + ' | ' + property.price + ' | ' + property.sqm + ' τ.μ.</p>';

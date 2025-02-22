@@ -212,8 +212,34 @@ class Search_Properties {
             while ( $query->have_posts() ) {
                 $query->the_post();
                 ?>
-                <div class="property-item" data-link="<?php echo esc_url( get_the_permalink() ); ?>">
-                    <h3 class="property-title"><a href="<?php echo esc_url( get_the_permalink() ); ?>"><?php the_title(); ?></a></h3>
+                <div class="property-result-item" data-link="<?php echo esc_url( get_the_permalink() ); ?>">
+                <?php
+                    // Retrieve the main image ID from the post meta.
+                    $main_image_id = get_post_meta( get_the_ID(), '_property_main_image', true );
+                    // Define a fallback placeholder image URL.
+                    error_log( 'MRFS_PLUGIN_URL: ' . MRFS_PLUGIN_URL );
+                    $placeholder_url = MRFS_PLUGIN_URL . 'assets/images/placeholder.jpg';
+                    // Start with the placeholder as the default.
+                    $img_url = $placeholder_url;
+                    // If there is a valid image ID, try to get the image URL.
+                    if ( $main_image_id && is_numeric( $main_image_id ) ) {
+                        error_log( 'MALAKIA');
+                        $img_data = wp_get_attachment_image_src( $main_image_id, array(320, 240) );
+                        if ( $img_data && isset( $img_data[0] ) ) {
+                            error_log( 'MALAKIA2');
+                            $img_url = $img_data[0];
+                        }
+                    }
+                    ?>
+                    <div class="property-result-image">
+                        <?php
+                        if ( $img_url ) {
+                            echo '<img src="' . esc_url( $img_url ) . '" style="width:100%; height:auto;" />';
+                        } else {
+                            echo '<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; background:#eee;">No image</div>';
+                        }
+                        ?>
+                    </div>
                     <p class="property-address"><?php echo esc_html( get_post_meta( get_the_ID(), '_property_address', true ) ); ?></p>
                     <p class="property-meta">
                         <?php
@@ -270,18 +296,35 @@ class Search_Properties {
                 $address = get_post_meta( get_the_ID(), '_property_address', true );
                 $city = get_post_meta( get_the_ID(), '_property_city', true );
                 $sqm = get_post_meta( get_the_ID(), '_property_sqm', true );
+                $bedrooms    = get_post_meta( get_the_ID(), '_property_bedrooms', true );
+                $bathrooms   = get_post_meta( get_the_ID(), '_property_bathrooms', true );
+                $floor       = get_post_meta( get_the_ID(), '_property_floor', true );
+                $description = get_post_meta( get_the_ID(), '_property_desc', true );
 
                 $main_image_id = get_post_meta( get_the_ID(), '_property_main_image', true );
                 $img_url = $main_image_id ? wp_get_attachment_url( $main_image_id ) : 'https://via.placeholder.com/320x240';
 
-                $output .= '<div class="swiper-slide">';
-                $output .= '<div class="random-property-result-item" data-link="' . esc_url( $permalink ) . '">';
-                $output .= '<div class="random-property-result-image"><img src="' . esc_url( $img_url ) . '" alt="' . esc_attr( $title ) . '" /></div>';
-                $output .= '<div class="random-property-result-details">';
-                $output .= '<h3 class="random-prop-kind-sqm">' . esc_html( $property_types[ $kind ] ) . ', ' . esc_html( $sqm ) . ' τ.μ.</h3>';
-                $output .= '<p class="random-prop-address-city"><i class="fas fa-map-marker-alt"></i> ' . esc_html( $address ) . ', ' . esc_html( $city ) . '</p>';
-                $output .= '<p class="random-prop-price">' . esc_html( $price ) . ' €</p>';
-                $output .= '</div></div></div>';
+                $output .= '
+                <div class="swiper-slide">
+                    <div class="random-property-result-item" data-link="' . esc_url( $permalink ) . '">
+                        <div class="random-property-result-image">
+                            <img src="' . esc_url( $img_url ) . '" alt="' . esc_attr( $title ) . '" />
+                        </div>
+                        <div class="random-property-result-details">
+                            <h3 class="random-prop-kind-sqm">' . esc_html( $property_types[ $kind ] ) . ', ' . esc_html( $sqm ) . ' τ.μ.</h3>
+                            <p class="random-prop-address-city">
+                                <i class="fas fa-map-marker-alt"></i> ' . esc_html( $address ) . ', ' . esc_html( $city ) . '
+                            </p>
+                            <p class="random-prop-stairs-room">
+                                <i class="fa-solid fa-stairs"></i> ' . esc_html( $floor ) . 'ος &nbsp;&nbsp;
+                                <i class="fa-solid fa-bed"></i> ' . esc_html( $bedrooms ) . ' υ/δ &nbsp;&nbsp;
+                                <i class="fa-solid fa-bed"></i> ' . esc_html( $bathrooms ) . '
+                            </p>
+                            <p class="random-prop-description">' . esc_html( $description ) . '</p>
+                            <p class="random-prop-price">' . esc_html( $price ) . ' €</p>
+                        </div>
+                    </div>
+                </div>';
             }
             $output .= '</div>'; // End swiper-wrapper.
             $output .= '<div class="swiper-pagination"></div>';

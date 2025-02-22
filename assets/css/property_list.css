@@ -1,0 +1,42 @@
+.property-result-item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    height: 200px;
+    width: 100%;
+    cursor: pointer; 
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+
+  /* Hover Effect (Optional) */
+.property-result-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Light shadow on hover */
+}
+
+/* Active (Clicked) Effect */
+.property-result-item:active {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* Stronger shadow when clicked */
+}
+
+.property-result-image {
+    flex: 0 0 auto; /* Fixed width to match height for square shape */
+    width:320px; 
+    height: 200px; /* Full height */
+    border-radius: 8px 0px 0px 8px;
+    overflow: hidden;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.property-result-image img {
+    width: 100%;
+    height: 100%;
+    object-position: center center;
+    object-fit: cover; /* Prevents distortion while covering the container */
+    border-radius: 8px 0px 0px 8px; /* Matches the container's border radius */
+}

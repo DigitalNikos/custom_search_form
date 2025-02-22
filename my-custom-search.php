@@ -18,6 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Define constants for the plugin's path and URL.
 define( 'MY_CUSTOM_SEARCH_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MY_CUSTOM_SEARCH_URL', plugin_dir_url( __FILE__ ) );
+define( 'MRFS_PLUGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+
+
 
 // Include required files that contain our functions and classes.
 require_once MY_CUSTOM_SEARCH_PATH . 'includes/config.php';
@@ -54,10 +57,26 @@ function my_custom_search_enqueue_assets() {
         '1.0', 
         'all'
     );
+
+    wp_enqueue_style(
+        'my-custom-random-properties-style',
+        MY_CUSTOM_SEARCH_URL . 'assets/css/random-properties.css',
+        array(),
+        '1.0',
+        'all'
+    );
     
     wp_enqueue_style(
         'inline-search-style',
         MY_CUSTOM_SEARCH_URL . 'assets/css/inline-search-style.css',
+        array(),
+        '1.0',
+        'all'
+    );
+
+    wp_enqueue_style(
+        'property-list-style',
+        MY_CUSTOM_SEARCH_URL . 'assets/css/property_list.css',
         array(),
         '1.0',
         'all'
@@ -68,6 +87,24 @@ function my_custom_search_enqueue_assets() {
         MY_CUSTOM_SEARCH_URL . 'assets/js/search-scripts.js', 
         array( 'jquery' ), 
         '1.0', 
+        true
+    );
+
+    // Enqueue Swiper.js library (if not already included)
+    wp_enqueue_script(
+        'swiper-js',
+        'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js',
+        array(),
+        '10.0',
+        true
+    );
+
+    // Enqueue the Swiper initialization script
+    wp_enqueue_script(
+        'swiper-init',
+        MY_CUSTOM_SEARCH_URL . 'assets/js/swiper-init.js',
+        array('swiper-js'),
+        '1.0',
         true
     );
 
