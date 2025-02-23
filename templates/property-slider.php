@@ -58,7 +58,7 @@ $property_types = array(
                             </p>
                             <p class="random-prop-stairs-room">
                                 <i class="fa-solid fa-stairs"></i> <?php echo esc_html( $floor ); ?>ος &nbsp;&nbsp;
-                                <i class="fa-solid fa-bed"></i> <?php echo esc_html( $bedrooms ); ?> υ/δ &nbsp;&nbsp;
+                                <i class="fa-solid fa-bed"></i> <?php echo esc_html( $bedrooms ); ?> υ/δ afefaesfasefaesf&nbsp;&nbsp;
                                 <i class="fa-solid fa-bed"></i> <?php echo esc_html( $bathrooms ); ?>
                             </p>
                             <p class="random-prop-description"><?php echo esc_html( $description ); ?></p>

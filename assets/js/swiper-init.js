@@ -1,13 +1,26 @@
-document.addEventListener("DOMContentLoaded", function () {
+(function($, window, document, undefined) {
+    'use strict';
+
+    console.log("Swiper init script loaded!!!!!!!!!!!!!!!!!.");
     var swiperInstance = null;
 
     function initSwiper() {
-        if (window.innerWidth < 768) {
+        // Check if the Swiper container exists
+        var $container = $('.random-suggested-properties');
+        if ($container.length === 0) {
+            // Container not found, so do nothing.
+            console.log("Swiper container not found.");
+            return;
+        }
+
+        var windowWidth = $(window).width();
+
+        if (windowWidth < 768) {
             if (!swiperInstance) {
-                console.log("📱 Initializing Swiper for mobile.");
-                swiperInstance = new Swiper('.random-suggested-properties', {
+                console.log("Initializing Swiper for mobile.");
+                swiperInstance = new Swiper($container[0], {
                     slidesPerView: 1,
-                    spaceBetween: 10,
+                    spaceBetween: 20,
                     pagination: {
                         el: '.swiper-pagination',
                         clickable: true,
@@ -16,17 +29,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
         } else {
-            if (swiperInstance) {
-                console.log("💻 Destroying Swiper for desktop.");
-                swiperInstance.destroy(true, true);
+            if (swiperInstance && typeof swiperInstance.destroy === 'function') {
+                console.log("Destroying Swiper for desktop.");
+                try {
+                    swiperInstance.destroy();
+                } catch (e) {
+                    console.error("Error destroying Swiper:", e);
+                }
                 swiperInstance = null;
             }
         }
     }
 
-    // Initialize on page load
+    // Initialize on load.
     initSwiper();
 
-    // Reinitialize on window resize
-    window.addEventListener("resize", initSwiper);
-});
+    // Re-check on window resize.
+    $(window).on('resize', initSwiper);
+})(jQuery, window, document);

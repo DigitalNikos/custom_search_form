@@ -40,3 +40,36 @@
     object-fit: cover; /* Prevents distortion while covering the container */
     border-radius: 8px 0px 0px 8px; /* Matches the container's border radius */
 }
+
+.property-result-details {
+    flex: 1; 
+    font-family: 'Manrope', sans-serif;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column; /* ✅ Ensures all content is stacked correctly */
+    justify-content: space-between; /* ✅ Makes sure price stays at the bottom */
+ 
+}
+
+.prop-kind-sqm {
+    font-weight: 600; 
+    margin-bottom: 0px !important;
+  }
+
+  .prop-description{
+    font-size: 14px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2 !important; /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 28px !important;
+    line-height: 1; /* ✅ Adjust spacing between lines */
+  
+  }
+
+  .prop-price {
+    font-weight: 600;
+    color: black;
+    font-size: 25px !important;
+}

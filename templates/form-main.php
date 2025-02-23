@@ -42,44 +42,45 @@ if ( ! defined( 'ABSPATH' ) ) {
                 ?>
             </select>
         </div>
-        
-        <div class="form-row">
-            <label class="form-icon"><i class="fa-solid fa-tag"></i></label>
-            <div class="form-field-group">
-                <div class="form-field half-width">
-                    <select name="price_min" id="price_min">
-                        <option value=""><?php esc_html_e( 'Τιμή από', 'my-custom-search' ); ?></option>
-                    </select>
-                </div>
-                <div class="form-field half-width">
+
+        <div class="price-half-width">
+            <div class="form-field">
+                <label class="form-icon"><i class="fa-solid fa-tag"></i></label>
+                <select name="price_min" id="price_min">
+                    <option value=""><?php esc_html_e( 'Τιμή από', 'my-custom-search' ); ?></option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label class="form-icon"><i class="fa-solid fa-tag"></i></label>
                 <select name="price_max" id="price_max">
-                        <option value=""><?php esc_html_e( 'Τιμή έως', 'my-custom-search' ); ?></option>
-                    </select>
-                </div>
+                    <option value=""><?php esc_html_e( 'Τιμή έως', 'my-custom-search' ); ?></option>
+                </select>
             </div>
         </div>
-        <div class="form-row">
-            <label class="form-icon"><i class="fa-solid fa-ruler-combined"></i></label>
-            <div class="form-field-group">
-                <div class="form-field half-width">
-                    <select name="sqm_min" id="sqm_min">
-                        <option value=""><?php esc_html_e( 'τ.μ. Από', 'my-custom-search' ); ?></option>
-                        <?php foreach ( MRFS_SQM_MIN as $sqm ) : ?>
-                            <option value="<?php echo esc_attr( $sqm ); ?>"><?php echo esc_html( $sqm ); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-field half-width">
-                    <select name="sqm_max" id="sqm_max">
-                        <option value=""><?php esc_html_e( 'τ.μ. Έως', 'my-custom-search' ); ?></option>
-                        <?php foreach ( MRFS_SQM_MAX as $sqm ) : ?>
-                            <option value="<?php echo esc_attr( $sqm ); ?>"><?php echo esc_html( $sqm ); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+
+        <div class="price-half-width">
+            <div class="form-field">
+                <label class="form-icon"><i class="fa-solid fa-ruler-combined"></i></label>
+                <select name="sqm_min" id="sqm_min">
+                    <option value=""><?php esc_html_e( 'τ.μ. Από', 'my-custom-search' ); ?></option>
+                    <?php foreach ( MRFS_SQM_MIN as $sqm ) : ?>
+                        <option value="<?php echo esc_attr( $sqm ); ?>"><?php echo esc_html( $sqm ); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label class="form-icon"><i class="fa-solid fa-ruler-combined"></i></label>
+                <select name="sqm_max" id="sqm_max">
+                    <option value=""><?php esc_html_e( 'τ.μ. Έως', 'my-custom-search' ); ?></option>
+                    <?php foreach ( MRFS_SQM_MAX as $sqm ) : ?>
+                        <option value="<?php echo esc_attr( $sqm ); ?>"><?php echo esc_html( $sqm ); ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
         </div>
-        <div class="form-field">
+        <div class="form-field button-field">
             <button type="submit" class="search-btn"><?php esc_html_e( 'Αναζήτηση', 'my-custom-search' ); ?></button>
         </div>
     </form>

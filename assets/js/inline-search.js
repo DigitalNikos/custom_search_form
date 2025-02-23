@@ -55,6 +55,7 @@
             this.updateInlinePriceDropdowns(); // Populate price dropdowns on init.
             this.updateInlineSqmDropdowns(); 
             this.setPreselectedValues();
+            this.bindClickPropertyItems();
         },
 
         /**
@@ -337,6 +338,16 @@
                 },
                 error: function(xhr, status, error) {
                     console.error("AJAX Error (inline filter):", status, error);
+                }
+            });
+        },
+
+        // Binds click event on property items to redirect.
+        bindClickPropertyItems: function() {
+            $(document).on('click', '.property-result-item', function() {
+                var link = $(this).data('link');
+                if (link) {
+                    window.location.href = link;
                 }
             });
         },

@@ -211,6 +211,25 @@ class Search_Properties {
             echo '<div class="property-results-list">';
             while ( $query->have_posts() ) {
                 $query->the_post();
+                $county      = get_post_meta( get_the_ID(), '_property_county', true );
+                $kind        = get_post_meta( get_the_ID(), '_property_kind', true );
+                $price       = get_post_meta( get_the_ID(), '_property_price', true );
+                $address     = get_post_meta( get_the_ID(), '_property_address', true );
+                $city        = get_post_meta( get_the_ID(), '_property_city', true );
+                $sqm         = get_post_meta( get_the_ID(), '_property_sqm', true );
+                $description = get_post_meta( get_the_ID(), '_property_desc', true );
+                $bathrooms  = get_post_meta( get_the_ID(), '_property_bathrooms', true );
+
+                $full_address = trim( $address . ', ' . $city );
+
+                $property_types = array(
+                    'apartment'     => __( 'Διαμέρισμα', 'my-custom-search' ),
+                    'house'         => __( 'Μονοκατοικία', 'my-custom-search' ),
+                    'plot'          => __( 'Οικόπεδο', 'my-custom-search' ),
+                    'land'          => __( 'Χωράφι', 'my-custom-search' ),
+                    'office'        => __( 'Επαγγελματικός χώρος', 'my-custom-search' ),
+                    'service_areas' => __( 'Βοηθητικοί χώροι', 'my-custom-search' ),
+                );
                 ?>
                 <div class="property-result-item" data-link="<?php echo esc_url( get_the_permalink() ); ?>">
                 <?php
@@ -234,21 +253,36 @@ class Search_Properties {
                     <div class="property-result-image">
                         <?php
                         if ( $img_url ) {
-                            echo '<img src="' . esc_url( $img_url ) . '" style="width:100%; height:auto;" />';
+                            echo '<img src="' . esc_url( $img_url ) . '" />';
                         } else {
                             echo '<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; background:#eee;">No image</div>';
                         }
                         ?>
                     </div>
-                    <p class="property-address"><?php echo esc_html( get_post_meta( get_the_ID(), '_property_address', true ) ); ?></p>
-                    <p class="property-meta">
-                        <?php
-                        $kind = get_post_meta( get_the_ID(), '_property_kind', true );
-                        $price = get_post_meta( get_the_ID(), '_property_price', true );
-                        $sqm = get_post_meta( get_the_ID(), '_property_sqm', true );
-                        echo esc_html( $kind ) . ' | ' . esc_html( $price ) . ' | ' . esc_html( $sqm ) . ' τ.μ.';
-                        ?>
-                    </p>
+                    <div class="property-result-details">
+                        <h3 class="prop-kind-sqm">
+                            <?php echo esc_html( $property_types[ $kind ] ) . ', ' . esc_html( $sqm ) . ' τ.μ.'; ?>
+                        </h3>
+                        <p class="prop-address-city">
+                          <?php 
+                             echo esc_html( $address );
+                             if ( $address && $city ) {
+                                 echo ', ';
+                             }
+                             echo esc_html( $city );
+                             echo ' (' . esc_html( $county ) . ')';
+                          ?>
+                        </p>
+                        
+                        <p class="prop-description">
+                            <?php echo esc_html( $description ); ?>
+                        </p>
+                        <p class="prop-price">
+                          <?php echo esc_html( $price ) . ' €'; ?>
+                        </p>
+                    </div>
+                    
+                    
                 </div>
                 <?php
             }

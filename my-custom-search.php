@@ -100,13 +100,15 @@ function my_custom_search_enqueue_assets() {
     );
 
     // Enqueue the Swiper initialization script
-    wp_enqueue_script(
-        'swiper-init',
-        MY_CUSTOM_SEARCH_URL . 'assets/js/swiper-init.js',
-        array('swiper-js'),
-        '1.0',
-        true
-    );
+    if ( is_front_page() ){
+        wp_enqueue_script(
+            'swiper-init',
+            MY_CUSTOM_SEARCH_URL . 'assets/js/swiper-init.js',
+            array('swiper-js'),
+            '1.0',
+            true
+        );
+    }
 
     if ( is_page( 'property-search-results' ) ) {
         wp_enqueue_script(
