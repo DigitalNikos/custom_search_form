@@ -56,11 +56,18 @@ $property_types = array(
                                 <i class="fas fa-map-marker-alt"></i>
                                 <?php echo esc_html( $address ) . ', ' . esc_html( $city ); ?>
                             </p>
-                            <p class="random-prop-stairs-room">
-                                <i class="fa-solid fa-stairs"></i> <?php echo esc_html( $floor ); ?>ος &nbsp;&nbsp;
-                                <i class="fa-solid fa-bed"></i> <?php echo esc_html( $bedrooms ); ?> υ/δ afefaesfasefaesf&nbsp;&nbsp;
-                                <i class="fa-solid fa-bed"></i> <?php echo esc_html( $bathrooms ); ?>
-                            </p>
+
+                            <div class="property-amenities">
+                                <div class="amenity">
+                                  <i class="fas fa-ruler-combined"></i> <?php echo esc_html($sqm); ?> m²
+                                </div>
+                                <div class="amenity">
+                                  <i class="fas fa-bed"></i> <?php echo esc_html($bedrooms); ?> υ/δ
+                                </div>
+                                <div class="amenity">
+                                  <i class="fas fa-bath"></i> <?php echo esc_html($bathrooms); ?> μπ 
+                                </div>
+                            </div>
                             <p class="random-prop-description"><?php echo esc_html( $description ); ?></p>
                             <p class="random-prop-price"><?php echo esc_html( $price ) . ' €'; ?></p>
                         </div>

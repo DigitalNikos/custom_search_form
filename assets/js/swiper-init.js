@@ -41,6 +41,15 @@
         }
     }
 
+    
+    $(document).on('click', '.random-property-result-item', function() {
+        var link = $(this).data('link');
+        if (link) {
+          window.location.href = link;
+        }
+      });
+    
+
     // Initialize on load.
     initSwiper();
 

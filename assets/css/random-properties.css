@@ -8,6 +8,26 @@
     justify-content: center;
 }
 
+.property-amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+
+  .amenity {
+    background-color: #f3f3f3;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .amenity i {
+    margin-right: 5px;
+    color: #7BB131;
+  }
+
 /* 🔹 Swiper wrapper for mobile (Prevents Swiper from affecting desktop grid) */
 @media (min-width: 769px) {
     .swiper-wrapper {
@@ -23,7 +43,7 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
-    max-width: 320px; /* Prevents overly wide cards */
+    max-width: 340px; /* Prevents overly wide cards */
 }
 
 /* 🔹 Hover Effect */
@@ -59,12 +79,12 @@
 .random-prop-kind-sqm {
     font-weight: 600;
     font-size: 1.125rem;
-    margin-bottom: 8px;
+    margin-bottom: 8px !important;
     color: #333;
 }
 
 .random-prop-address-city {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #777;
     margin-bottom: 8px;
 }
@@ -88,7 +108,7 @@
     color: #555;
     line-height: 1.4;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -96,8 +116,8 @@
 }
 
 .random-prop-price {
-    font-weight: bold;
-    font-size: 1.5rem;
+    font-weight: 900;
+    font-size: 1.6rem;
     color: #2c3e50;
     text-align: right;
 }
@@ -105,7 +125,7 @@
 /* ✅ MOBILE-FRIENDLY SWIPER STYLING */
 @media (max-width: 768px) {
     .random-suggested-properties {
-        display: block !important; /* Prevents grid interference */
+       
         padding: 0;
         overflow-x: hidden;
     }
