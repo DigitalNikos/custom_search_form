@@ -47,7 +47,7 @@ function my_custom_search_enqueue_assets() {
     if ( is_page( 'property-search-results' ) ) {
         wp_enqueue_script(
           'google-maps-api',
-          'https://maps.googleapis.com/maps/api/js?key=AIzaSyDHtL4YsE0bcyHOWsqUAYP_zR9JaY_Oczg&libraries=places',
+          'https://maps.googleapis.com/maps/api/js?key=API_KEY&libraries=places',
           array(),
           null,
           true
