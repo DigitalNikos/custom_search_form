@@ -43,6 +43,63 @@ add_action( 'plugins_loaded', 'my_custom_search_init' );
  */
 function my_custom_search_enqueue_assets() {
 
+
+    if ( is_page( 'property-search-results' ) ) {
+        wp_enqueue_script(
+          'google-maps-api',
+          'https://maps.googleapis.com/maps/api/js?key=AIzaSyDHtL4YsE0bcyHOWsqUAYP_zR9JaY_Oczg&libraries=places',
+          array(),
+          null,
+          true
+        );
+
+        wp_enqueue_script(
+            'marker-clusterer',
+            'https://unpkg.com/@googlemaps/markerclusterer/dist/index.umd.min.js',
+            array('google-maps-api'), // Make sure it loads after Google Maps
+            '2.0.0',
+            true
+        );
+
+        wp_enqueue_script(
+          'my-map-handler',
+          MY_CUSTOM_SEARCH_URL . 'assets/js/map-handler.js',
+          array( 'jquery', 'google-maps-api', 'marker-clusterer' ),
+          '1.0',
+          true
+        );
+
+        wp_enqueue_script(
+            'my-inline-search',
+            MY_CUSTOM_SEARCH_URL . 'assets/js/inline-search.js',
+            array('jquery'),
+            '1.0',
+            true
+        );
+
+        wp_enqueue_script(
+            'mobile-toggle',
+            MY_CUSTOM_SEARCH_URL . 'assets/js/mobile-toggle.js',
+            array('jquery'),
+            '1.0',
+            true
+        );
+
+        wp_enqueue_style(
+            'gm-info-window', 
+            MY_CUSTOM_SEARCH_URL . 'assets/css/gm-info-window.css', 
+            array(), 
+            '1.0', 
+            'all'
+        );
+        // Localize map handler script with necessary data.
+        wp_localize_script( 'my-custom-search-scripts', 'mapData', array(
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce'    => wp_create_nonce( 'some_nonce' ),
+            // Add additional map-specific data here if needed.
+        ) );
+    }
+
     wp_enqueue_style(
         'font-awesome-6',
         'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css',
@@ -110,16 +167,6 @@ function my_custom_search_enqueue_assets() {
         );
     }
 
-    if ( is_page( 'property-search-results' ) ) {
-        wp_enqueue_script(
-            'my-inline-search',
-            MY_CUSTOM_SEARCH_URL . 'assets/js/inline-search.js',
-            array('jquery'),
-            '1.0',
-            true
-        );
-    }
-
     wp_localize_script( 'my-custom-search-scripts', 'mySearchData', array(
         'ajax_url'         => admin_url( 'admin-ajax.php' ),
         'nonce'            => wp_create_nonce( 'res_filter_nonce' ),
@@ -137,12 +184,16 @@ function my_custom_search_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'my_custom_search_enqueue_assets' );
 
 
+// Register AJAX actions for filtering properties.
 add_action( 'wp_ajax_nopriv_filter_properties', array( 'Search_Properties', 'filter_properties' ) );
 add_action( 'wp_ajax_filter_properties', array( 'Search_Properties', 'filter_properties' ) );
+
 /**
- * Register shortcodes to output the search forms.
+ * Register shortcodes to output the search forms and property results.
  * - [my_custom_search_main]: Renders the main homepage search form.
  * - [my_custom_search_inline]: Renders the inline search form for the results page.
+ * - [my_custom_search_results]: Renders the property results.
+ * - [my_custom_random_results]: Renders a random property slider.
  */
 function my_custom_search_register_shortcodes() {
     add_shortcode( 'my_custom_search_main', array( 'Search_Form', 'render_main_form' ) );

@@ -376,6 +376,60 @@
         }
     };
 
+    jQuery(document).on('mouseenter', '.property-result-item', function() {
+        console.log("Mouse enter:", this);
+        var permalink = jQuery(this).data('link');
+        if (window.MRFS_Map && MRFS_Map.markers) {
+          MRFS_Map.markers.forEach(function(marker) {
+            if (marker.propertyData && marker.propertyData.permalink === permalink) {
+              // Change the marker icon to highlight it.
+              console.log("Highlighting marker for:", permalink);
+              marker.setIcon({
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 14, // increased scale for highlight
+                fillColor: '#006382', // change color to red
+                fillOpacity: 1,
+                strokeColor: '#FFFFFF',
+                strokeWeight: 4
+              });
+                
+              // Create and open an InfoWindow to show the price.
+                var priceContent = '<div class="marker-price-info">' + marker.propertyData.price + ' €</div>';
+
+                marker.infoWindow = new google.maps.InfoWindow({
+                    content: priceContent
+                  });
+                  marker.infoWindow.open(MRFS_Map.map, marker);
+            }
+          });
+        }
+      });
+    
+      jQuery(document).on('mouseleave', '.property-result-item', function() {
+        var permalink = jQuery(this).data('link');
+        if (window.MRFS_Map && MRFS_Map.markers) {
+          MRFS_Map.markers.forEach(function(marker) {
+            if (marker.propertyData && marker.propertyData.permalink === permalink) {
+              // Reset the marker icon to its default state.
+              marker.setIcon({
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 10, // default scale
+                fillColor: '#228B22', // default green color
+                fillOpacity: 1,
+                strokeColor: '#FFFFFF',
+                strokeWeight: 2
+              });
+              if (marker.infoWindow) {
+                marker.infoWindow.close();
+                marker.infoWindow = null;
+              }
+            }
+          });
+        }
+      });
+
+
+
     $(document).ready(function(){
         MRFS_InlineSearch.init();
     });

@@ -43,6 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             </select>
         </div>
 
+        <!-- Price Dropdowns -->
         <div class="price-half-width">
             <div class="form-field">
                 <label class="form-icon"><i class="fa-solid fa-tag"></i></label>
@@ -59,6 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
             </div>
         </div>
 
+        <!-- SQM Dropdowns -->
         <div class="price-half-width">
             <div class="form-field">
                 <label class="form-icon"><i class="fa-solid fa-ruler-combined"></i></label>

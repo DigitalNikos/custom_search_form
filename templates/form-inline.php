@@ -21,8 +21,16 @@ $selected_price_max = isset( $_GET['price_max'] ) ? sanitize_text_field( $_GET['
 $selected_sqm_min   = isset( $_GET['sqm_min'] )   ? sanitize_text_field( $_GET['sqm_min'] )   : '';
 $selected_sqm_max   = isset( $_GET['sqm_max'] )   ? sanitize_text_field( $_GET['sqm_max'] )   : '';
 ?>
+   <div class="mobile-controls">
+        <button id="mobile-filter-btn" class="mobile-btn">
+            <i class="fa fa-sliders" aria-hidden="true"></i>
+            Filter
+        </button>
+        <button id="mobile-view-btn" class="mobile-btn">
+        </button>
+    </div>
 <div class="inline-search-form-container">
-    <div class="inline-search-form-wrapper">
+    
         <form method="GET" action="<?php echo esc_url( site_url( '/property-search-results/' ) ); ?>" 
               class="inline-search-form"
               data-selected-county="<?php echo esc_attr($selected_county); ?>"
@@ -76,35 +84,40 @@ $selected_sqm_max   = isset( $_GET['sqm_max'] )   ? sanitize_text_field( $_GET['
                 </select>
             </div>
 
-            <!-- Price Dropdowns -->
-            <div class="inline-form-row">
-                <label class="inline-form-icon"><i class="fa-solid fa-tag"></i></label>
-                <div class="inline-form-field half-width">
-                    <select name="price_min" id="inline_price_min">
+             <!-- Price Dropdowns -->
+            <div class="inline-price-half-width">
+                <div class="inline-form-field">
+                    <label class="inline-form-icon"><i class="fa-solid fa-tag"></i></label>
+                    <select name="price_min" id="inline-price_min">
                         <option value=""><?php esc_html_e( 'Τιμή από', 'my-custom-search' ); ?></option>
                     </select>
                 </div>
-                <div class="inline-form-field half-width">
-                    <select name="price_max" id="inline_price_max">
+
+                <div class="inline-form-field">
+                    <label class="inline-form-icon"><i class="fa-solid fa-tag"></i></label>
+                    <select name="price_max" id="inline-price_max">
                         <option value=""><?php esc_html_e( 'Τιμή έως', 'my-custom-search' ); ?></option>
                     </select>
                 </div>
             </div>
 
+
             <!-- SQM Dropdowns -->
-            <div class="inline-form-row">
-                <label class="inline-form-icon"><i class="fa-solid fa-ruler-combined"></i></label>
-                <div class="inline-form-field half-width">
+            <div class="inline-price-half-width">
+                <div class="inline-form-field">
+                    <label class="inline-form-icon"><i class="fa-solid fa-ruler-combined"></i></label>
                     <select name="sqm_min" id="inline_sqm_min">
                         <option value=""><?php esc_html_e( 'τ.μ. Από', 'my-custom-search' ); ?></option>
                     </select>
                 </div>
-                <div class="inline-form-field half-width">
+
+                <div class="inline-form-field">
+                    <label class="inline-form-icon"><i class="fa-solid fa-ruler-combined"></i></label>
                     <select name="sqm_max" id="inline_sqm_max">
-                        <option value=""><?php esc_html_e( 'τ.μ. Έως', 'my-custom-search' ); ?></option>
+                            <option value=""><?php esc_html_e( 'τ.μ. Έως', 'my-custom-search' ); ?></option>
                     </select>
                 </div>
             </div>
         </form>
-    </div>
+    
 </div>
